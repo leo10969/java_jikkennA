@@ -16,13 +16,10 @@ public class DeleteButton extends JButton{
 		MyDrawing e1;
 
 		public void actionPerformed(ActionEvent e) {
-			Enumeration<MyDrawing> d = mediator.drawingsElements();
-			while(d.hasMoreElements()){
-				e1 = d.nextElement();
-				e1.setRegion();//選択する図形を取得。
-				if(e1.isSelected == true){
-					mediator.removeDrawing(e1);
-				}
+			Enumeration<MyDrawing> e1 = mediator.selectedDrawingsElements();
+			while(e1.hasMoreElements()){
+				MyDrawing d = e1.nextElement();
+				mediator.removeDrawing(d);
 			}	
 			
 			mediator.repaint();

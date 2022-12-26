@@ -53,7 +53,17 @@ public class MyRectangle extends MyDrawing {
             g2.fillRect(x2, y2, w, h);
             g2.drawRect(x2, y2, w, h);
         }
-        g2.setStroke(new BasicStroke(getLineWidth()));
+
+        if (isDashed){
+            g2.setStroke(new MyDash(getLineWidth()));
+            if(isSelectDashed){
+                g2.setStroke(lineType);
+            }
+        }
+		else{
+            g2.setStroke(new BasicStroke(getLineWidth()));
+        }
+			
         g2.setColor(getFillColor());
         g2.fillRect(x, y, w, h);
         g2.setColor(getLineColor());

@@ -54,7 +54,15 @@ public class MyOval extends MyDrawing{
             g3.fillOval(x2, y2, w, h);
             g3.drawOval(x2, y2, w, h);
         }
-        g3.setStroke(new BasicStroke(getLineWidth()));
+        if (isDashed){
+            g3.setStroke(new MyDash(getLineWidth()));
+            if(isSelectDashed){
+                g3.setStroke(lineType);
+            }
+        }
+		else{
+            g3.setStroke(new BasicStroke(getLineWidth()));
+        }
         g3.setColor(getFillColor());
         g3.fillOval(x, y, w, h);
         g3.setColor(getLineColor());

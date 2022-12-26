@@ -5,7 +5,8 @@ import javax.swing.*;
 public class MyCanvas extends JPanel {
     //各図形を格納するVector
     Mediator mediator;
-
+    int x = 500;
+    int y = 500;
     public MyCanvas(){
         this.mediator = new Mediator(this);
         setBackground(Color.white);

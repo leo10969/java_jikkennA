@@ -70,6 +70,15 @@ public class MyPondering extends MyDrawing{
                 g5.fillOval(xli2[i], yli2[i], w2, h2);
                 g5.drawOval(xli2[i], yli2[i], w2, h2);
             }
+            if (isDashed){
+                g5.setStroke(new MyDash(getLineWidth()));
+                if(isSelectDashed){
+                    g5.setStroke(lineType);
+                }
+            }
+            else{
+                g5.setStroke(new BasicStroke(getLineWidth()));
+            }
             g5.setColor(getFillColor());
             g5.fillOval(xli[i], yli[i], w2, h2);
             g5.setColor(getLineColor());

@@ -70,7 +70,15 @@ public class MyHendecagonal extends MyDrawing {
             g4.setColor(Color.black);
             g4.fillPolygon(xli2, yli2, n);
         }
-        g4.setStroke(new BasicStroke(getLineWidth()));
+        if (isDashed){
+            g4.setStroke(new MyDash(getLineWidth()));
+            if(isSelectDashed){
+                g4.setStroke(lineType);
+            }
+        }
+		else{
+            g4.setStroke(new BasicStroke(getLineWidth()));
+        }
         g4.setColor(getFillColor());
         g4.fillPolygon(xli, yli, n);
         g4.setColor(getLineColor());

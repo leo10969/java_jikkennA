@@ -1,13 +1,16 @@
 import java.awt.*;
 import java.awt.BasicStroke;
+import java.io.Serializable;
 import java.util.function.Supplier;
 
-public class MyDrawing implements Cloneable{
+public class MyDrawing implements Cloneable, Serializable{
     private int x, y, w, h;
     private Color lineColor = Color.black, fillColor = Color.white;
     private int lineWidth = 1;
-    private BasicStroke lineType;
+    BasicStroke lineType;
     boolean isSelected = false;
+    boolean isDashed = false;
+    boolean isSelectDashed = false;
     Shape region;//包含判定用
     final int SIZE = 7;//選択表示矩形につく四角形の大きさ
     boolean shadow;
@@ -161,6 +164,14 @@ public class MyDrawing implements Cloneable{
     }
     public void setLineWidth(int lineWidth){
         this.lineWidth = lineWidth;
+    }
+
+    public void setDashed(boolean b){
+        isDashed = b;
+    }
+
+    public boolean getDashed(){
+        return isDashed;
     }
 
     public BasicStroke getLineType(float width, int cap, int join, float miterlimit,  float[] dash, float dash_phase){

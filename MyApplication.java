@@ -11,6 +11,7 @@ public class MyApplication extends JFrame{
     private FillColorMenu fillColorMenu;
     private LineColorMenu lineColorMenu;
     private LineWidthMenu lineWidthMenu;
+	private DashMenu dashMenu;
 
     public MyApplication(){
         super("My Paint Application");
@@ -23,6 +24,13 @@ public class MyApplication extends JFrame{
         JPanel jp = new JPanel();
         jp.setLayout(new FlowLayout());
 
+		SaveButton saveButton = new SaveButton(canvas.mediator);
+		jp.add(saveButton);
+		LoadButton loadButton = new LoadButton(canvas.mediator);
+		jp.add(loadButton);
+		
+		JLabel border = new JLabel("||");
+		jp.add(border);
         stateManager = new StateManager(canvas);
 		CutButton cutButton = new CutButton(canvas.mediator);
 		jp.add(cutButton);
@@ -32,6 +40,8 @@ public class MyApplication extends JFrame{
 		jp.add(pasteButton);
 		ShadowButton shadowButton = new ShadowButton(canvas.mediator);
 		jp.add(shadowButton);
+		DashButton dashButton = new DashButton(canvas.mediator);
+		jp.add(dashButton);
         DeleteButton deleteButton = new DeleteButton(canvas.mediator);
 		jp.add(deleteButton);
         SelectButton selectButton = new SelectButton(stateManager);
@@ -48,21 +58,37 @@ public class MyApplication extends JFrame{
         
 
         // メニューバーの設定
-		JLabel fillColorLabel = new JLabel("fillColor");
 		fillColorMenu = new FillColorMenu();
 		fillColorMenu.addActionListener(new FillColorListener(this));
-		menuBar.add(fillColorLabel);
+		fillColorMenu.setToolTipText("図形内の色を指定");
 		menuBar.add(fillColorMenu);
-		JLabel lineColorLabel = new JLabel("lineColor");
+		
 		lineColorMenu = new LineColorMenu();
 		lineColorMenu.addActionListener(new LineColorListener(this));
-		menuBar.add(lineColorLabel);
+		lineColorMenu.setToolTipText("図形の枠の色を指定");
 		menuBar.add(lineColorMenu);
-		JLabel lineWidthLabel = new JLabel("lineWidth");
+		
 		lineWidthMenu = new LineWidthMenu();
 		lineWidthMenu.addActionListener(new LineWidthListener());
-		menuBar.add(lineWidthLabel);
+		lineWidthMenu.setToolTipText("図形の太さを指定");
 		menuBar.add(lineWidthMenu);
+		
+		dashMenu = new DashMenu();
+		dashMenu.addActionListener(new DashMenuListener());
+		dashMenu.setToolTipText("破線の種類を指定");
+		menuBar.add(dashMenu);
+		
+		JLabel alphaLabel = new JLabel("Alpha");
+		AlphaMenu alphaMenu = new AlphaMenu(canvas.mediator);
+		alphaMenu.setToolTipText("図形の透明度を指定");
+		menuBar.add(alphaLabel);
+		menuBar.add(alphaMenu);
+
+		JLabel recanLabel = new JLabel("Canvas");
+		ResizeCanvas resizeCanvasMenu = new ResizeCanvas(canvas);
+		resizeCanvasMenu.setToolTipText("キャンバスのサイズを指定");
+		menuBar.add(recanLabel);
+		menuBar.add(resizeCanvasMenu);
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(jp, BorderLayout.NORTH);
@@ -78,6 +104,12 @@ public class MyApplication extends JFrame{
                 stateManager.mouseUp(e.getX(), e.getY());
                 stateManager.mediator.repaint();
             }
+			public void mouseClicked(MouseEvent e){
+				if(e.getClickCount() > 1){
+					stateManager.mediator.ToFront(e.getClickCount());
+				}
+				stateManager.mediator.repaint();
+			}
         });
 
         canvas.addMouseMotionListener(new MouseMotionAdapter(){
@@ -101,7 +133,7 @@ public class MyApplication extends JFrame{
 			this.app = app;
 		}
 		public void actionPerformed(ActionEvent e) {
-            if (fillColorMenu.getSelectedItem() == "black") {
+			if (fillColorMenu.getSelectedItem() == "black") {
 				stateManager.mediator.setFillColor(Color.black);
 				stateManager.mediator.repaint();
 			}
@@ -198,6 +230,21 @@ public class MyApplication extends JFrame{
 			String str = (String)lineWidthMenu.getSelectedItem();
 			int width = Integer.parseInt(str);
 			stateManager.mediator.setLineWidth(width);
+			stateManager.mediator.repaint();
+		}
+	}
+
+	class DashMenuListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			String str = (String)dashMenu.getSelectedItem();
+			String dashstr[] = str.split(",");
+			float dashfloat[] = new float[dashstr.length];
+			for(int i = 0; i < dashstr.length; i++){
+				try {
+					dashfloat[i] = Float.parseFloat(dashstr[i]);
+				} catch (Exception e1) {}
+			}
+			stateManager.mediator.selectDash(dashfloat);
 			stateManager.mediator.repaint();
 		}
 	}
